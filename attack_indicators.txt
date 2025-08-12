@@ -1,0 +1,93 @@
+# attack_indicators.txt
+# OWASP CRS attack patterns (latest)
+# One indicator per line. Lines starting with # are comments.
+
+# SQL Injection
+sql_injection
+sqli
+union select
+select from
+information_schema
+sleep\(
+benchmark\(
+'or 1=1--
+' or '1'='1
+xp_cmdshell
+
+# Cross-Site Scripting (XSS)
+xss
+<script
+onerror=
+onload=
+javascript:
+alert\(
+document.cookie
+<svg
+<iframe
+<embed
+
+# Remote File Inclusion (RFI)
+rfi
+http://
+https://
+ftp://
+file://
+input_file
+include_path
+
+# Local File Inclusion (LFI)
+lfi
+../../
+..\\
+/etc/passwd
+boot.ini
+proc/self/environ
+
+# OS Command Injection
+os_command_injection
+;\s*\b(cat|ls|rm|cp|mv|wget|curl|nc|bash|sh|python|perl|php)\b
+&&
+|\s*\b(cat|ls|rm|cp|mv|wget|curl|nc|bash|sh|python|perl|php)\b
+
+# Path Traversal
+path_traversal
+../
+..\\
+
+# PHP Injection
+php_injection
+<?php
+phpinfo\(
+
+# Java Injection
+java_injection
+Runtime.getRuntime\(
+ProcessBuilder
+
+# Session Fixation
+session_fixation
+PHPSESSID=
+JSESSIONID=
+ASPSESSIONID=
+
+# HTTP Protocol Violations
+http_protocol_violation
+Transfer-Encoding: chunked
+Content-Length: 0
+
+# Remote Code Execution
+remote_code_execution
+system\(
+exec\(
+popen\(
+
+# Other attacks
+csrf
+xxe
+insecure_deserialization
+reDos
+open_redirect
+http_splitting
+http_smuggling
+webshell
+backdoor

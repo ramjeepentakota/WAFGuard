@@ -1,0 +1,38 @@
+# Simplified waf_blocker configuration
+
+# Path to the ModSecurity/WAF audit log (single file)
+waf_log: /var/log/apache2/modsec_audit.log
+
+# Output directory for daily CSV reports (modsec_output_YYYY-MM-DD.csv)
+output_dir: output/
+
+# Indicators and whitelists
+attack_indicators: attack_indicators.txt
+url_whitelist: url_whitelist.txt
+
+# Blocking configuration
+block_mode: iptables          # Options: iptables, ipset
+block_ttl_minutes: 60         # Block duration in minutes
+block_dry_run: false           # Default true. Real apply requires --apply and WAF_BLOCKER_CONFIRM=1
+block_max_ips_per_run: 20000     # Max number of IPs to block per run
+block_audit_log: logs/blocked.log
+block_state: state/blocked_state.json
+
+# Logging
+log_dir: logs/
+log_level: INFO
+
+# Resource limits (safety)
+max_cpu_percent: 20           # Max CPU usage percent
+max_memory_mb: 256            # Max memory usage in MB
+
+# Stateful log offsets
+state_file: state/waf_blocker_state.json
+
+# Service configuration
+service:
+  host: 127.0.0.1
+  port: 8085
+  # Optional background scheduler
+  # auto_run_minutes: 15
+  # auto_apply: false

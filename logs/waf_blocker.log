@@ -1,0 +1,2 @@
+2025-08-11 17:01:51,809 WARNING --apply was used but WAF_BLOCKER_CONFIRM=1 is not set. Running in dry-run mode for safety.
+2025-08-11 17:08:13,819 WARNING --apply was used but WAF_BLOCKER_CONFIRM=1 is not set. Running in dry-run mode for safety.

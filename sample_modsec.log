@@ -1,0 +1,17 @@
+---12345-67890---A--
+[11/Aug/2025:09:12:34 +0000] 203.0.113.45 www.example.com 0 0 0
+---12345-67890---B--
+GET /index.php?id=1%20OR%201=1 HTTP/1.1
+Host: www.example.com
+User-Agent: test-agent
+X-Forwarded-For: 198.51.100.23
+---12345-67890---F--
+HTTP/1.1 403 Forbidden
+---12345-67890---H--
+Message: Warning. detected SQLi attack [msg "SQL Injection Attack Detected"] [data "SELECT ..."] [id "942100"] [rev "4"] [msg "SQLi" ] [severity "CRITICAL"] [ver "OWASP_CRS/4.0.0"] [tag "attack-sqli"] [hostname "www.example.com"] [uri "/index.php"] [unique_id "abcde12345"] [ref "o0,1v56,9t:lowerCase"]
+Action: Intercepted (phase 2)
+Apache-Handler: php-script
+Stopwatch: 1691745154444 0 (0 - 0)
+Producer: ModSecurity for Apache/2.9.6 (http://www.modsecurity.org/);
+Server: Apache
+Engine-Mode: "ENABLED"

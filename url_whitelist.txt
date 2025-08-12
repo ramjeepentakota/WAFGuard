@@ -1,0 +1,9 @@
+# url_whitelist.txt
+# List of safe URLs (exact match or regex) that should never trigger blocking
+# One URL per line. Lines starting with # are comments.
+
+/
+/index.html
+/healthcheck
+/api/status
+/static/

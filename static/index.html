@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>WAF Blocker - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="brand">WAF Blocker</div>
+    <ul class="menu">
+      <li class="active"><a href="#" id="menu-dashboard">Dashboard</a></li>
+      <li><a href="#" id="menu-reports">Reports</a></li>
+      <li><a href="#" id="menu-logs">Logs</a></li>
+    </ul>
+    <div class="right">
+      <span id="svc-status" class="badge">Idle</span>
+      <button id="btn-run">Run</button>
+      <label class="switch"><input type="checkbox" id="apply"><span class="slider"></span><span class="switch-label">Apply</span></label>
+    </div>
+  </nav>
+
+  <main class="container" id="page-dashboard">
+    <section class="filters">
+      <div class="group">
+        <label>Period</label>
+        <select id="period">
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+        </select>
+      </div>
+      <div class="group">
+        <label>Date</label>
+        <input type="date" id="date"/>
+      </div>
+      <div class="group">
+        <button id="btn-refresh">Refresh</button>
+      </div>
+    </section>
+
+    <section class="kpis">
+      <div class="kpi">
+        <div class="kpi-title">Total Events</div>
+        <div class="kpi-value" id="total">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Confirmed Attacks</div>
+        <div class="kpi-value" id="confirmed">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Blocked</div>
+        <div class="kpi-value" id="blocked">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Critical</div>
+        <div class="kpi-value critical" id="sev-critical">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">High</div>
+        <div class="kpi-value high" id="sev-high">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Medium</div>
+        <div class="kpi-value medium" id="sev-medium">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">Low</div>
+        <div class="kpi-value low" id="sev-low">0</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-title">Events Timeline</div>
+        <canvas id="timeline"></canvas>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Severity Breakdown</div>
+        <canvas id="severity"></canvas>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-title">Recent Activity</div>
+        <table class="table" id="events">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Client IP</th>
+              <th>URL</th>
+              <th>Anomaly</th>
+              <th>Severity</th>
+              <th>Blocked</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Reports</div>
+        <div id="files"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">Service Logs</div>
+      <pre id="log"></pre>
+    </section>
+  </main>
+
+  <main class="container" id="page-reports" style="display:none">
+    <section class="panel">
+      <div class="panel-title">Download Reports</div>
+      <div class="filters">
+        <div class="group">
+          <label>Day</label>
+          <input type="date" id="rep-day" />
+          <button id="btn-dl-day">Download Day CSV</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-title">Active WAF Log</div>
+        <pre id="active-log"></pre>
+        <button id="btn-refresh-active-log">Refresh Active Log</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Recently Blocked IPs</div>
+        <table class="table" id="blocked">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Blocked At</th>
+              <th>Expiry</th>
+              <th>Reason (rule/message/url)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="btn-refresh-blocked">Refresh Blocked</button>
+      </div>
+    </section>
+  </main>
+
+  <main class="container" id="page-logs" style="display:none">
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-title">Active ModSecurity Log</div>
+        <div class="filters">
+          <div class="group">
+            <label>Tail lines</label>
+            <input type="number" id="tail-active" value="400" min="50" max="5000" step="50" />
+          </div>
+          <div class="group">
+            <label>Auto refresh</label>
+            <label class="switch"><input type="checkbox" id="auto-active"><span class="slider"></span></label>
+          </div>
+          <div class="group">
+            <button id="btn-refresh-active-tab">Refresh</button>
+          </div>
+        </div>
+        <pre id="logs-active"></pre>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Service Log</div>
+        <div class="filters">
+          <div class="group">
+            <label>Tail lines</label>
+            <input type="number" id="tail-service" value="400" min="50" max="5000" step="50" />
+          </div>
+          <div class="group">
+            <label>Auto refresh</label>
+            <label class="switch"><input type="checkbox" id="auto-service"><span class="slider"></span></label>
+          </div>
+          <div class="group">
+            <button id="btn-refresh-service-tab">Refresh</button>
+          </div>
+        </div>
+        <pre id="logs-service"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>
